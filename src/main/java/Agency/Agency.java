@@ -1,6 +1,7 @@
 package Agency;
 
 public class Agency {
+
     private String agency_code;
     private String corresponded_id;
     private String description;
@@ -13,6 +14,20 @@ public class Agency {
     private String terminal;
 
     public Agency() {
+    }
+
+    public Agency(String agency_code, String corresponded_id, String description, String disabled, String distance,
+                  String id, String payment_method_id, String phone, String site_id, String terminal) {
+        this.agency_code = agency_code;
+        this.corresponded_id = corresponded_id;
+        this.description = description;
+        this.disabled = disabled;
+        this.distance = distance;
+        this.id = id;
+        this.payment_method_id = payment_method_id;
+        this.phone = phone;
+        this.site_id = site_id;
+        this.terminal = terminal;
     }
 
     public String getAgency_code() {
@@ -93,5 +108,21 @@ public class Agency {
 
     public void setTerminal(String terminal) {
         this.terminal = terminal;
+    }
+
+    @Override
+    public String toString() {
+        return "Agency{" +
+                "agency_code='" + agency_code + '\'' +
+                ", corresponded_id='" + corresponded_id + '\'' +
+                ", description='" + description + '\'' +
+                ", disabled='" + disabled + '\'' +
+                ", distance='" + distance + '\'' +
+                ", id='" + id + '\'' +
+                ", payment_method_id='" + payment_method_id + '\'' +
+                ", phone='" + phone + '\'' +
+                ", site_id='" + site_id + '\'' +
+                ", terminal='" + terminal + '\'' +
+                '}';
     }
 }
