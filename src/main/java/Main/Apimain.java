@@ -1,9 +1,10 @@
 package Main;
-
+import  Enum.CriterioOrden;
 import Agency.Agency;
 import Agency.AgencyException;
 import Agency.AgencyImpl;
 import Agency.AgencyService;
+import Operador.Operador;
 import StandardResponse.StandardResponse;
 import StandardResponse.StatusResponse;
 import com.google.gson.Gson;
@@ -17,25 +18,30 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
 
+import static Enum.CriterioOrden.*;
 import static spark.Spark.get;
 import static spark.Spark.port;
 
 public class Apimain {
     public static void main(String[] args) {
         AgencyService agencyService = new AgencyImpl();
-
         port(8082);
+
         get("/agencias", (request, response) -> {
             String site_id = request.queryParams("site_id");
             String payment_method_id = request.queryParams("payment_method_id");
             String near_to = request.queryParams("near_to");
             String limit = request.queryParams("limit");
             String offset = request.queryParams("offset");
+            String orden = request.queryParams("orden");
             Agency[] agencies = null;
 
             String urlArmada = armarUrl(site_id, payment_method_id, near_to, limit, offset);
             System.out.println("url es " + urlArmada);
+            System.out.println("orden elegido: " + orden);
             try {
                 String data = readUrl(urlArmada);
                 //System.out.println(data);
@@ -50,7 +56,7 @@ public class Apimain {
             }
             response.type("application/json");
             return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
-                    new Gson().toJsonTree(agencies)));
+                    new Gson().toJsonTree(ordenarAgencias(agencies, orden))));
         });
 
     }
@@ -62,7 +68,6 @@ public class Apimain {
         // me fijo si exiten los parametros
 
         if (site_id.isEmpty()) {
-            System.out.println("nulo" + site_id);
             throw new AgencyException("El site_id no puede ser nulo");
         } else {
             url = url + site_id + "/payment_methods/";
@@ -108,6 +113,37 @@ public class Apimain {
             }
 
 
+        }
+    }
+
+    static Agency[] ordenarAgencias(Agency[] agencies, String orden) {
+        switch (orden) {
+            case "address_line":
+                System.out.println(ADDRESS_LINE);
+                setOrden(ADDRESS_LINE,agencies);
+                Operador.ordenar(agencies);
+                break;
+            case "agency_code":
+                System.out.println(AGENCY_CODE);
+                setOrden(AGENCY_CODE,agencies);
+                Operador.ordenar(agencies);
+                break;
+            case "distance":
+                System.out.println(DISTANCE);
+                setOrden(DISTANCE, agencies);
+                Operador.ordenar(agencies);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: ");
+        }
+
+
+        return agencies;
+    }
+
+    static void setOrden(CriterioOrden criterioOrden,Agency[] agencies) {
+        for (Agency agency : agencies) {
+            agency.setCriterioOrden(criterioOrden);
         }
     }
 }
