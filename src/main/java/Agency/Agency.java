@@ -1,5 +1,7 @@
 package Agency;
 
+import Address.Address;
+
 public class Agency {
 
     private String agency_code;
@@ -12,12 +14,13 @@ public class Agency {
     private String phone;
     private String site_id;
     private String terminal;
+    private Address address;
 
     public Agency() {
     }
 
     public Agency(String agency_code, String corresponded_id, String description, String disabled, String distance,
-                  String id, String payment_method_id, String phone, String site_id, String terminal) {
+                  String id, String payment_method_id, String phone, String site_id, String terminal, Address address) {
         this.agency_code = agency_code;
         this.corresponded_id = corresponded_id;
         this.description = description;
@@ -28,6 +31,15 @@ public class Agency {
         this.phone = phone;
         this.site_id = site_id;
         this.terminal = terminal;
+        this.address = address;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public String getAgency_code() {
