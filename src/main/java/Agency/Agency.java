@@ -1,9 +1,9 @@
 package Agency;
 
+import Enum.CriterioOrden;
 import Address.Address;
 
-public class Agency {
-
+public class Agency implements Comparable<Agency>{
     private String agency_code;
     private String corresponded_id;
     private String description;
@@ -15,12 +15,13 @@ public class Agency {
     private String site_id;
     private String terminal;
     private Address address;
-
+    private CriterioOrden criterioOrden;
     public Agency() {
     }
 
     public Agency(String agency_code, String corresponded_id, String description, String disabled, String distance,
-                  String id, String payment_method_id, String phone, String site_id, String terminal, Address address) {
+                  String id, String payment_method_id, String phone, String site_id, String terminal,
+                  Address address, CriterioOrden criterioOrden) {
         this.agency_code = agency_code;
         this.corresponded_id = corresponded_id;
         this.description = description;
@@ -32,14 +33,7 @@ public class Agency {
         this.site_id = site_id;
         this.terminal = terminal;
         this.address = address;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
+        this.criterioOrden = criterioOrden;
     }
 
     public String getAgency_code() {
@@ -122,19 +116,33 @@ public class Agency {
         this.terminal = terminal;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public CriterioOrden getCriterioOrden() {
+        return criterioOrden;
+    }
+
+    public void setCriterioOrden(CriterioOrden criterioOrden) {
+        this.criterioOrden = criterioOrden;
+    }
+
     @Override
-    public String toString() {
-        return "Agency{" +
-                "agency_code='" + agency_code + '\'' +
-                ", corresponded_id='" + corresponded_id + '\'' +
-                ", description='" + description + '\'' +
-                ", disabled='" + disabled + '\'' +
-                ", distance='" + distance + '\'' +
-                ", id='" + id + '\'' +
-                ", payment_method_id='" + payment_method_id + '\'' +
-                ", phone='" + phone + '\'' +
-                ", site_id='" + site_id + '\'' +
-                ", terminal='" + terminal + '\'' +
-                '}';
+    public int compareTo(Agency o) {
+        switch (this.criterioOrden){
+            case ADDRESS_LINE:
+                return address.getAddress_line().compareTo(o.getAddress().getAddress_line());
+            case AGENCY_CODE:
+                return new Float(getAgency_code()).compareTo(new Float(o.getAgency_code()));
+            case DISTANCE:
+                return new Float(getDistance()).compareTo(new Float(o.getDistance()));
+            default:
+                throw new IllegalStateException("Unexpected value: " + this.criterioOrden);
+        }
     }
 }
